@@ -81,13 +81,14 @@ function contactAvatar(user: Contact) {
  return undefined;
 }
 
-export function DirectConversation({ contactName, ownEmail, messages, onMessage }: {
+export function DirectConversation({ contactName, ownEmail, messages, onMessage, draft, onDraftChange }: {
  contactName: string;
  ownEmail: string;
  messages: Message[];
  onMessage: (text: string) => void;
+ draft: string;
+ onDraftChange: (draft: string) => void;
 }) {
- const [draft, setDraft] = useState('');
  const text = draft.trim();
 
  return (
@@ -100,11 +101,12 @@ export function DirectConversation({ contactName, ownEmail, messages, onMessage 
      </View>
     ))}
    </View>
+   <Text style={styles.muted}>Revise a mensagem antes de enviar. Neste protótipo, o chat salva mensagens apenas neste dispositivo; não confirma uma compra.</Text>
    <View style={styles.composer}>
     <TextInput accessibilityLabel="Escreva uma mensagem" placeholder="Escreva uma mensagem" value={draft}
-     onChangeText={setDraft} maxLength={1000} multiline style={[styles.input, styles.messageInput]} />
+     onChangeText={onDraftChange} maxLength={1000} multiline style={[styles.input, styles.messageInput]} />
     <Pressable accessibilityRole="button" accessibilityLabel="Enviar mensagem" disabled={!text}
-     onPress={() => { onMessage(text); setDraft(''); }} style={[styles.primary, !text && styles.disabled]}>
+     onPress={() => { onMessage(text); onDraftChange(''); }} style={[styles.primary, !text && styles.disabled]}>
      <Text style={styles.primaryText}>Enviar</Text>
     </Pressable>
    </View>
